@@ -1,1 +1,0 @@
-make -C /src/Altera/linux-socfpga ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- M=`pwd`
