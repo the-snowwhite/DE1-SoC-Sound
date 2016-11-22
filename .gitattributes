@@ -13,6 +13,7 @@
 *.h text
 *.ld text
 *.sh text
+*.tcl text
 Makefile* text
 Doxyfile* text
 
