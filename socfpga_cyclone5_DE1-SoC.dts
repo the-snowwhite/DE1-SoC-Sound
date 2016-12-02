@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2013 Steffen Trumtrar <s.trumtrar@pengutronix.de>
+ *  Copyright (C) 2016 Stephen Arnold <nerdboy@gentoo.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +24,8 @@
 	compatible = "altr,socfpga-cyclone5", "altr,socfpga";
 
 	chosen {
-		bootargs = "console=ttyS0,115200";
+		bootargs = "earlyprintk";
+		stdout-path = "serial0:115200n8";
 	};
 
 	memory {
@@ -33,17 +35,21 @@
 	};
 
 	aliases {
-		/* this allow the ethaddr uboot environmnet variable contents
-		 * to be added to the gmac1 device tree blob.
-		 */
 		ethernet0 = &gmac1;
+	};
+
+	regulator_3_3v: 3-3-v-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "3.3V";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
 	};
 
 	leds {
 		compatible = "gpio-leds";
 		user {
 			label = "user-led";
-			gpios = <&gpio1 24 0>;
+			gpios = <&portb 24 0>;
 			linux,default-trigger = "heartbeat";
 		};
 #if 0
@@ -51,7 +57,7 @@
 		/* The alternative is to model it as a regulator for codec */
 		i2c0mux {
 			label = "i2c0-mux";
-			gpios = <&gpio1 19 0>;
+			gpios = <&portb 19 0>;
 			linux,default-trigger = "default-on";
 		};
 #endif
@@ -64,31 +70,17 @@
 
 		user_pb {
 			label = "user_pb";
-			gpios = <&gpio1 25 0>;
+			gpios = <&portb 25 0>;
 			linux,code = <28>;
 			gpio-key,wakeup;
                 };
         };
 
-	soc {
-		gpio@ff708000 {
-			status = "okay";
-		};
-
-		gpio@ff709000 {
-			status = "okay";
-		};
-
-		gpio@ff70a000 {
-			status = "okay";
-		};
-	};
-
         sound {
 	        compatible = "opencores,de1soc-wm8731-audio";
 		i2s-controller = <&i2s>;
-		audio-codec = <&codec>;
-		i2c-mux-gpio = <&gpio1 19 0>;
+		audio-codec = <&adxl345>;
+		//i2c-mux-gpio = <&portb 19 0>;
         };
 
 	clk48: clk48 {
@@ -119,15 +111,17 @@
 		compatible = "dummy";
 		reg = <0xff200020 0x20>;
 	};
+#endif
+
 	vip2@100 {
-		compatible = "altr,vip-frame-reader-13.0", "altr,vip-frame-reader-9.1";
+		compatible = "altr,vip-frame-reader-1.0", "altr,vip-frame-reader-9.1";
 		reg = <0xff200100 0x180>;
 		max-width = <0x400>;
 		max-height = <0x300>;
 		mem-word-width = <0x80>;
 		bits-per-color = <0x8>;
 	};
-#endif
+
 	sysid@2000 {
 		compatible = "altr,sysid-1.0";
 		reg = <0xff202000 0x8>;
@@ -189,48 +183,89 @@
 	status = "okay";
 	phy-mode = "rgmii";
 
-	rxd0-skew-ps = <0>;
-	rxd1-skew-ps = <0>;
-	rxd2-skew-ps = <0>;
-	rxd3-skew-ps = <0>;
-	txen-skew-ps = <0>;
-	txc-skew-ps = <2600>;
-	rxdv-skew-ps = <0>;
-	rxc-skew-ps = <2000>;
+	txd0-skew-ps = <0>; /* -420ps */
+	txd1-skew-ps = <0>; /* -420ps */
+	txd2-skew-ps = <0>; /* -420ps */
+	txd3-skew-ps = <0>; /* -420ps */
+	rxd0-skew-ps = <420>; /* 0ps */
+	rxd1-skew-ps = <420>; /* 0ps */
+	rxd2-skew-ps = <420>; /* 0ps */
+	rxd3-skew-ps = <420>; /* 0ps */
+	txen-skew-ps = <0>; /* -420ps */
+	txc-skew-ps = <1860>; /* 960ps */
+	rxdv-skew-ps = <420>; /* 0ps */
+	rxc-skew-ps = <1680>; /* 780ps */
+
+	max-frame-size = <3800>;
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+&gpio2 {
+	status = "okay";
+};
+
+&qspi {
+	status = "okay";
+};
+
+&spi0 {
+	status = "okay";
+
+	spidev@0 {
+		/* spidev causes a WARN_ON() so spoof with DAC compat */
+		compatible = "rohm,dh2228fv";
+		reg = <0>;      /* chip select */
+		spi-max-frequency = <1000000>;
+		enable-dma = <1>;
+	};
+};
+
+&uart0 {
+	status = "okay";
 };
 
 &usb1 {
 	status = "okay";
 };
 
-&mmc {
+&spi1 {
 	status = "okay";
-	num-slots = <0x1>;
-	supports-highspeed;
-	broken-cd;
-	altr,dw-mshc-ciu-div = <0x3>;
-	altr,dw-mshc-sdr-timing = <0x0 0x3>;
+};
 
-	slot@0 {
-		reg = <0x0>;
-		bus-width = <0x4>;
-	};
+&mmc0 {
+	vmmc-supply = <&regulator_3_3v>;
+	vqmmc-supply = <&regulator_3_3v>;
+	status = "okay";
 };
 
 &i2c0 {
 	status = "okay";
-	clock-frequency = <100000>;
+	//clock-frequency = <100000>;
 	speed-mode = <0>;
 
-	codec: wm8731@34 {
+	wm8731: wm8731@34 {
 		#sound-dai-cells = <0>;
 		compatible = "wlf,wm8731";
 		reg = <0x1a>;
 	};
-	adxl345@53 {
+
+	adxl345: adxl345@0 {
 		compatible = "adi,adxl34x";
 		reg = <0x53>;
-		interrupt-parent = <&gpio2>;
-		interrupts = <3 4>;
+
+		interrupt-parent = <&portc>;
+		interrupts = <3 2>;
 	};
+};
+
+&i2c1 {
+	status = "okay";
+	speed-mode = <0>;
 };
