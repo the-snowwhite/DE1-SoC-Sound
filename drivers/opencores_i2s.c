@@ -16,9 +16,9 @@
 
 #include <sound/core.h>
 #include <sound/pcm.h>
+#include <sound/dmaengine_pcm.h>
 #include <sound/pcm_params.h>
 #include <sound/soc.h>
-#include <sound/dmaengine_pcm.h>
 
 #define DAC_FIFO_ADDR	0x00
 #define STATUS_ADDR	0x04
@@ -101,7 +101,7 @@ static int opencores_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
 static int divisor_value(unsigned long xtal_rate, unsigned long rate, int shift)
 {
 	return ((xtal_rate / rate / 2) >> shift) - 1;
-} 
+}
 
 static int opencores_i2s_hw_params(struct snd_pcm_substream *substream,
 	struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
@@ -118,7 +118,7 @@ static int opencores_i2s_hw_params(struct snd_pcm_substream *substream,
 	dev_dbg(dai->dev, "hw_params rate=%d\n", params_rate(params));
 	if (params_format(params) != SNDRV_PCM_FORMAT_S32_LE)
 		return -EINVAL;
-	
+
 	if ((params_rate(params) % 44100) == 0) {
 		val = CLK_SEL_48_44;
 		xtal_rate = clk_get_rate(i2s->clk44);
@@ -144,10 +144,10 @@ static int opencores_i2s_hw_params(struct snd_pcm_substream *substream,
 	regmap_update_bits(i2s->regmap_clk, CLK_CTRL1, mask, val);
 	dev_dbg(dai->dev, "hw_params mask=0x%x val=0x%x\n", mask, val);
 	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
-		val2 = lrclk_div << CAP_LRC_DIV_SHIFT; 
+		val2 = lrclk_div << CAP_LRC_DIV_SHIFT;
 		mask2 = CAP_LRC_DIV_MASK;
 	} else {
-		val2 = lrclk_div << PB_LRC_DIV_SHIFT; 
+		val2 = lrclk_div << PB_LRC_DIV_SHIFT;
 		mask2 = PB_LRC_DIV_MASK;
 	}
 	regmap_update_bits(i2s->regmap_clk, CLK_CTRL2, mask2, val2);

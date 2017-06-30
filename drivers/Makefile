@@ -1,25 +1,19 @@
-PREFIX  = $(CROSS_COMPILE)
-CC      = $(PREFIX)gcc
-CXX     = $(PREFIX)g++
-CPP     = $(PREFIX)cpp
-LD      = $(PREFIX)gcc
-AR      = $(PREFIX)ar
-RANLIB  = $(PREFIX)ranlib
-
-SRC := $(shell pwd)
-KERNEL_SRC ?= $(HOME)/my_stuff/home/hardware/terasic/linux-socfpga
-
-obj-m += snd-soc-opencores-i2s.o
+snd-soc-de1-soc-wm8731-objs := de1-soc-wm8731.o
 obj-m += snd-soc-de1-soc-wm8731.o
 
-all:
-	$(MAKE) -C $(KERNEL_SRC) M=$(SRC)
+snd-soc-opencores-i2s-objs := opencores_i2s.o
+obj-m += snd-soc-opencores-i2s.o
 
-modules_install:
-	$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
+KERNEL_SRC_DIR="/home/mib/Development/HolosynthV-Image-gen/arm-linux-4.9.33-gnueabifh-kernel/linux-4.9.33"
+#KERNEL_SRC_DIR="/home/mib/Development/HolosynthV-Image-gen/arm-linux-4.1.22-gnueabifh-kernel/linux"
+PWD=$(shell pwd)
+#CROSS_C="/home/mib/Development/Beta3_Project/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-"
+CROSS_C="/home/mib/bin/gcc-linaro-5.2-2015.11-1-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
+//NCORES=`nproc`
+NCORES=1
+
+all:
+	make -j$(NCORES) -C $(KERNEL_SRC_DIR) ARCH=arm CROSS_COMPILE=$(CROSS_C) M=$(PWD) modules
 
 clean:
-	rm -f *.o *~ core .depend .*.cmd *.ko *.mod.c
-	rm -f Module.markers Module.symvers modules.order
-	rm -rf .tmp_versions Modules.symvers
-
+	make -j$(NCORES) ARCH=arm CROSS_COMPILE=$(CROSS_C) -C $(KERNEL_SRC_DIR) M=$(PWD) clean
