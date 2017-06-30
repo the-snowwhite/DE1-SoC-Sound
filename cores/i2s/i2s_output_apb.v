@@ -17,6 +17,7 @@ module i2s_output_apb (
 	input wire			playback_fifo_clk,
 	// DMA interface, SOCFPGA
 	output reg			playback_dma_req,
+	output reg			playback_dma_single,
 	input wire			playback_dma_ack,
 	output wire			playback_dma_enable,
 	// FIFO interface to capture shift register
@@ -27,6 +28,7 @@ module i2s_output_apb (
 	input wire			capture_fifo_clk,
 	// DMA interface, SOCFPGA
 	output reg			capture_dma_req,
+	output reg			capture_dma_single,
 	input wire			capture_dma_ack,
 	output wire			capture_dma_enable
 );
@@ -47,7 +49,7 @@ module i2s_output_apb (
 
 	reg		[31:0]	cmd_reg;
 	reg		[31:0]	sts_reg;
-	
+
 	wire			data_sel = psel && (paddr == 0);
 	wire			sts_sel = psel && (paddr == 4); // RO
 	wire			cmd_sel = psel && (paddr == 8);
@@ -92,7 +94,7 @@ module i2s_output_apb (
 			sts_reg[0] <= wr_fifo_empty;
 			sts_reg[1] <= wr_fifo_full;
 			sts_reg[2] <= playback_dma_enable;
-			sts_reg[3] <= playback_dma_req;
+			sts_reg[3] <= playback_dma_single;
 			sts_reg[4] <= playback_dma_ack;
 			sts_reg[7:5] <= 3'b0;
 			sts_reg[12:8] <= wr_fifo_used;
@@ -100,7 +102,7 @@ module i2s_output_apb (
 			sts_reg[16] <= rd_fifo_empty;
 			sts_reg[17] <= rd_fifo_full;
 			sts_reg[18] <= capture_dma_enable;
-			sts_reg[19] <= capture_dma_req;
+			sts_reg[19] <= capture_dma_single;
 			sts_reg[20] <= capture_dma_ack;
 			sts_reg[23:21] <= 3'b0;
 			sts_reg[28:24] <= rd_fifo_used;
@@ -113,30 +115,30 @@ module i2s_output_apb (
 	begin
 		if (~reset_n)
 		begin
-			playback_dma_req <= 0;
+			playback_dma_single <= 0;
 		end
 		else
 		begin
 			if (playback_dma_ack)
-				playback_dma_req <= 0;
+				playback_dma_single <= 0;
 			else
-				playback_dma_req <= playback_dma_enable & ~wr_fifo_full;
+				playback_dma_single <= playback_dma_enable & ~wr_fifo_full;
 		end
 	end
-	
+
 	// Capture DMA request
 	always @(posedge clk or negedge reset_n)
 	begin
 		if (~reset_n)
 		begin
-			capture_dma_req <= 0;
+			capture_dma_single <= 0;
 		end
 		else
 		begin
 			if (capture_dma_ack)
-				capture_dma_req <= 0;
+				capture_dma_single <= 0;
 			else
-				capture_dma_req <= capture_dma_enable & ~rd_fifo_empty;
+				capture_dma_single <= capture_dma_enable & ~rd_fifo_empty;
 		end
 	end
 

@@ -145,6 +145,26 @@ module DE1_SOC_Linux_Audio(
 	inout			[35:0]		GPIO_1
 );
 
+//////////// GPIO - 15" LCD  //////////
+
+wire	[7:0]	LCD_B;
+wire			LCD_DCLK;
+wire	[7:0]	LCD_G;
+wire			LCD_HSD;
+wire	[7:0]	LCD_R;
+wire			LCD_DE;
+wire			LCD_VSD;
+
+assign GPIO_0[28:22]    = LCD_B[7:1];
+assign GPIO_0[20]       = LCD_B[0];
+assign GPIO_0[21]       = LCD_G[7];
+assign GPIO_0[19:18]    = LCD_G[6:5];
+assign GPIO_0[15:11]    = LCD_G[4:0];
+assign GPIO_0[10:3]     = LCD_R;
+assign GPIO_0[1]        = LCD_DCLK;
+assign GPIO_0[30]       = ~LCD_HSD;
+assign GPIO_0[35]       = LCD_DE;
+assign GPIO_0[31]       = ~LCD_VSD;
 
 
 //=======================================================
@@ -152,18 +172,6 @@ module DE1_SOC_Linux_Audio(
 //=======================================================
 	wire				clock_bridge_0_out_clk_clk;
 	wire				hps_0_h2f_reset_reset_n;
-	wire				hps_0_f2h_dma_req0_dma_req;
-	wire				hps_0_f2h_dma_req0_dma_single;
-	wire				hps_0_f2h_dma_req0_dma_ack;
-	wire				hps_0_f2h_dma_req1_dma_req;
-	wire				hps_0_f2h_dma_req1_dma_single;
-	wire				hps_0_f2h_dma_req1_dma_ack;
-	wire				hps_0_f2h_dma_req2_dma_req;
-	wire				hps_0_f2h_dma_req2_dma_single;
-	wire				hps_0_f2h_dma_req2_dma_ack;
-	wire				hps_0_f2h_dma_req3_dma_req;
-	wire				hps_0_f2h_dma_req3_dma_single;
-	wire				hps_0_f2h_dma_req3_dma_ack;
 	wire	[63:0]		i2s_output_apb_0_playback_fifo_data;
 	wire				i2s_output_apb_0_playback_fifo_read;
 	wire				i2s_output_apb_0_playback_fifo_empty;
@@ -194,7 +202,6 @@ module DE1_SOC_Linux_Audio(
 //  Structural coding
 //=======================================================
 
-
     soc_system u0 (
 		.clk_clk							(CLOCK_50),
 		.reset_reset_n						(hps_0_h2f_reset_reset_n),
@@ -216,20 +223,16 @@ module DE1_SOC_Linux_Audio(
 		.memory_mem_odt						(HPS_DDR3_ODT),
 		.memory_mem_dm						(HPS_DDR3_DM),
 		.memory_oct_rzqin					(HPS_DDR3_RZQ),
-
-		.hps_0_f2h_dma_req0_dma_req			(hps_0_f2h_dma_req0_dma_req),
-		.hps_0_f2h_dma_req0_dma_single		(hps_0_f2h_dma_req0_dma_single),
-		.hps_0_f2h_dma_req0_dma_ack			(hps_0_f2h_dma_req0_dma_ack),
-		.hps_0_f2h_dma_req1_dma_req			(hps_0_f2h_dma_req1_dma_req),
-		.hps_0_f2h_dma_req1_dma_single		(hps_0_f2h_dma_req1_dma_single),
-		.hps_0_f2h_dma_req1_dma_ack			(hps_0_f2h_dma_req1_dma_ack),
-		.hps_0_f2h_dma_req2_dma_req			(hps_0_f2h_dma_req2_dma_req),
-		.hps_0_f2h_dma_req2_dma_single		(hps_0_f2h_dma_req2_dma_single),
-		.hps_0_f2h_dma_req2_dma_ack			(hps_0_f2h_dma_req2_dma_ack),
-		.hps_0_f2h_dma_req3_dma_req			(hps_0_f2h_dma_req3_dma_req),
-		.hps_0_f2h_dma_req3_dma_single		(hps_0_f2h_dma_req3_dma_single),
-		.hps_0_f2h_dma_req3_dma_ack			(hps_0_f2h_dma_req3_dma_ack),
-
+        .lcd_clk_clk                                  (LCD_DCLK),
+        .alt_vip_itc_0_clocked_video_vid_clk          (LCD_DCLK),
+        .alt_vip_itc_0_clocked_video_vid_data         ({LCD_R,LCD_G,LCD_B}),
+        .alt_vip_itc_0_clocked_video_underflow        (),
+        .alt_vip_itc_0_clocked_video_vid_datavalid    (LCD_DE),
+        .alt_vip_itc_0_clocked_video_vid_v_sync       (LCD_VSD),
+        .alt_vip_itc_0_clocked_video_vid_h_sync       (LCD_HSD),
+        .alt_vip_itc_0_clocked_video_vid_f            (),
+        .alt_vip_itc_0_clocked_video_vid_h            (),
+        .alt_vip_itc_0_clocked_video_vid_v            (),
 		.hps_io_hps_io_emac1_inst_TX_CLK	(HPS_ENET_GTX_CLK),
 		.hps_io_hps_io_emac1_inst_TXD0		(HPS_ENET_TX_DATA[0]),
 		.hps_io_hps_io_emac1_inst_TXD1		(HPS_ENET_TX_DATA[1]),
@@ -302,22 +305,19 @@ module DE1_SOC_Linux_Audio(
 		.i2s_output_apb_0_playback_fifo_empty(i2s_output_apb_0_playback_fifo_empty),
 		.i2s_output_apb_0_playback_fifo_full(i2s_output_apb_0_playback_fifo_full),
 		.i2s_output_apb_0_playback_fifo_clk	(i2s_output_apb_0_playback_fifo_clk),
-		.i2s_output_apb_0_playback_dma_req	(hps_0_f2h_dma_req0_dma_single),
-		.i2s_output_apb_0_playback_dma_ack	(hps_0_f2h_dma_req0_dma_ack),
-		.i2s_output_apb_0_playback_dma_enable(i2s_output_apb_0_playback_dma_enable),
+		.i2s_output_apb_0_dma_control_enable_playback(i2s_output_apb_0_playback_dma_enable),
 		.i2s_output_apb_0_capture_fifo_data	(i2s_output_apb_0_capture_fifo_data),
 		.i2s_output_apb_0_capture_fifo_write(i2s_output_apb_0_capture_fifo_write),
 		.i2s_output_apb_0_capture_fifo_empty(i2s_output_apb_0_capture_fifo_empty),
 		.i2s_output_apb_0_capture_fifo_full	(i2s_output_apb_0_capture_fifo_full),
 		.i2s_output_apb_0_capture_fifo_clk	(i2s_output_apb_0_capture_fifo_clk),
-		.i2s_output_apb_0_capture_dma_req	(hps_0_f2h_dma_req1_dma_single),
-		.i2s_output_apb_0_capture_dma_ack	(hps_0_f2h_dma_req1_dma_ack),
-		.i2s_output_apb_0_capture_dma_enable(i2s_output_apb_0_capture_dma_enable),
+		.i2s_output_apb_0_dma_control_enable_capture(i2s_output_apb_0_capture_dma_enable),
 
 		.i2s_clkctrl_apb_0_ext_bclk			(i2s_clkctrl_apb_0_ext_bclk),
 		.i2s_clkctrl_apb_0_ext_playback_lrclk(i2s_clkctrl_apb_0_ext_playback_lrclk),
 		.i2s_clkctrl_apb_0_ext_capture_lrclk(i2s_clkctrl_apb_0_ext_capture_lrclk),
 		.i2s_clkctrl_apb_0_conduit_master_slave_mode(i2s_clkctrl_apb_0_conduit_master_slave_mode),
+
 		.i2s_clkctrl_apb_0_conduit_clk_sel_48_44(i2s_clkctrl_apb_0_conduit_clk_sel_48_44),
 		.i2s_clkctrl_apb_0_conduit_bclk		(i2s_clkctrl_apb_0_conduit_bclk),
 		.i2s_clkctrl_apb_0_conduit_playback_lrclk(i2s_clkctrl_apb_0_conduit_playback_lrclk),
@@ -326,7 +326,7 @@ module DE1_SOC_Linux_Audio(
 
 		.clock_bridge_48_out_clk_clk		(clock_bridge_48_out_clk_clk),
 		.clock_bridge_44_out_clk_clk		(clock_bridge_44_out_clk_clk),
- 
+
 	);
 
 	wire i2s_playback_fifo_ack48;
@@ -334,12 +334,12 @@ module DE1_SOC_Linux_Audio(
 	i2s_shift_out i2s_shift_out48(
 		.reset_n							(hps_0_h2f_reset_reset_n),
 		.clk								(clock_bridge_48_out_clk_clk),
-		
+
 		.fifo_right_data					(i2s_output_apb_0_playback_fifo_data[63:32]),
 		.fifo_left_data						(i2s_output_apb_0_playback_fifo_data[31:0]),
 		.fifo_ready							(~i2s_output_apb_0_playback_fifo_empty),
 		.fifo_ack							(i2s_playback_fifo_ack48),
-  
+
 		.enable								(i2s_playback_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
 		.lrclk								(i2s_clkctrl_apb_0_conduit_playback_lrclk),
@@ -350,12 +350,12 @@ module DE1_SOC_Linux_Audio(
 	i2s_shift_out i2s_shift_out44(
 		.reset_n							(hps_0_h2f_reset_reset_n),
 		.clk								(clock_bridge_44_out_clk_clk),
-		
+
 		.fifo_right_data					(i2s_output_apb_0_playback_fifo_data[63:32]),
 		.fifo_left_data						(i2s_output_apb_0_playback_fifo_data[31:0]),
 		.fifo_ready							(~i2s_output_apb_0_playback_fifo_empty),
 		.fifo_ack							(i2s_playback_fifo_ack44),
-  
+
 		.enable								(i2s_playback_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
 		.lrclk								(i2s_clkctrl_apb_0_conduit_playback_lrclk),
@@ -368,12 +368,12 @@ module DE1_SOC_Linux_Audio(
 	i2s_shift_in i2s_shift_in48(
 		.reset_n							(hps_0_h2f_reset_reset_n),
 		.clk								(clock_bridge_48_out_clk_clk),
-		
+
 		.fifo_right_data					(i2s_capture_fifo_data48[63:32]),
 		.fifo_left_data						(i2s_capture_fifo_data48[31:0]),
 		.fifo_ready							(~i2s_output_apb_0_capture_fifo_full),
 		.fifo_write							(i2s_capture_fifo_write48),
-  
+
 		.enable								(i2s_capture_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
 		.lrclk								(i2s_clkctrl_apb_0_conduit_capture_lrclk),
@@ -385,12 +385,12 @@ module DE1_SOC_Linux_Audio(
 	i2s_shift_in i2s_shift_in44(
 		.reset_n							(hps_0_h2f_reset_reset_n),
 		.clk								(clock_bridge_44_out_clk_clk),
-		
+
 		.fifo_right_data					(i2s_capture_fifo_data44[63:32]),
 		.fifo_left_data						(i2s_capture_fifo_data44[31:0]),
 		.fifo_ready							(~i2s_output_apb_0_capture_fifo_full),
 		.fifo_write							(i2s_capture_fifo_write44),
-  
+
 		.enable								(i2s_capture_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
 		.lrclk								(i2s_clkctrl_apb_0_conduit_capture_lrclk),
@@ -438,7 +438,7 @@ module DE1_SOC_Linux_Audio(
 	assign i2s_data_in48 = AUD_ADCDAT;
 	//assign i2s_data_in44 = i2s_data_out44; // Loopback for testing
 	//assign i2s_data_in48 = i2s_data_out48; // Loopback for testing
-	
+
 	// Audio clocks inouts
 	assign AUD_BCLK = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
 		i2s_clkctrl_apb_0_conduit_bclk : 1'bZ;
