@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "7";
          type = "int";
       }
    }
@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "6";
          type = "int";
       }
    }
@@ -46,30 +46,6 @@
       datum _sortIndex
       {
          value = "0";
-         type = "int";
-      }
-   }
-   element clock_bridge_0
-   {
-      datum _sortIndex
-      {
-         value = "8";
-         type = "int";
-      }
-   }
-   element clock_bridge_44
-   {
-      datum _sortIndex
-      {
-         value = "7";
-         type = "int";
-      }
-   }
-   element clock_bridge_48
-   {
-      datum _sortIndex
-      {
-         value = "6";
          type = "int";
       }
    }
@@ -109,8 +85,16 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "8";
          type = "int";
+      }
+   }
+   element soc_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
       }
    }
    element soc_system
@@ -180,21 +164,6 @@
    type="conduit"
    dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
- <interface
-   name="clock_bridge_0_out_clk"
-   internal="clock_bridge_0.out_clk"
-   type="clock"
-   dir="start" />
- <interface
-   name="clock_bridge_44_out_clk"
-   internal="clock_bridge_44.out_clk"
-   type="clock"
-   dir="start" />
- <interface
-   name="clock_bridge_48_out_clk"
-   internal="clock_bridge_48.out_clk"
-   type="clock"
-   dir="start" />
  <interface name="hps_0_f2h_dma_req2" internal="hps_0.f2h_dma_req2" />
  <interface name="hps_0_f2h_dma_req3" internal="hps_0.f2h_dma_req3" />
  <interface name="hps_0_h2f_loan_io" internal="hps_0.h2f_loan_io" />
@@ -209,11 +178,7 @@
    internal="i2s_clkctrl_apb_0.conduit"
    type="conduit"
    dir="end" />
- <interface
-   name="i2s_clkctrl_apb_0_ext"
-   internal="i2s_clkctrl_apb_0.ext"
-   type="conduit"
-   dir="end" />
+ <interface name="i2s_clkctrl_apb_0_ext" internal="i2s_clkctrl_apb_0.ext" />
  <interface
    name="i2s_clkctrl_apb_0_mclk"
    internal="i2s_clkctrl_apb_0.mclk"
@@ -501,33 +466,6 @@
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
- </module>
- <module
-   name="clock_bridge_0"
-   kind="altera_clock_bridge"
-   version="16.1"
-   enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="50000000" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
- </module>
- <module
-   name="clock_bridge_44"
-   kind="altera_clock_bridge"
-   version="16.1"
-   enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="33720930" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
- </module>
- <module
-   name="clock_bridge_48"
-   kind="altera_clock_bridge"
-   version="16.1"
-   enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="24576271" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
  <module name="hps_0" kind="altera_hps" version="16.1" enabled="1">
   <parameter name="ABSTRACT_REAL_COMPARE_TEST" value="false" />
@@ -1360,11 +1298,6 @@
    version="16.1"
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
- <connection
-   kind="clock"
-   version="16.1"
-   start="clk_0.clk"
-   end="clock_bridge_0.in_clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="audio_pll.refclk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="pll_0.refclk" />
  <connection
@@ -1380,11 +1313,6 @@
  <connection
    kind="clock"
    version="16.1"
-   start="audio_pll.outclk0"
-   end="clock_bridge_48.in_clk" />
- <connection
-   kind="clock"
-   version="16.1"
    start="pll_0.outclk0"
    end="alt_vip_itc_0.is_clk_rst" />
  <connection
@@ -1392,11 +1320,6 @@
    version="16.1"
    start="audio_pll.outclk1"
    end="i2s_clkctrl_apb_0.clk_44" />
- <connection
-   kind="clock"
-   version="16.1"
-   start="audio_pll.outclk1"
-   end="clock_bridge_44.in_clk" />
  <connection
    kind="conduit"
    version="16.1"

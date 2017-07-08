@@ -3,21 +3,21 @@
 # DO NOT MODIFY
 
 
-# 
+#
 # i2s_clkctrl_api "i2s_clkctrl_apb" v1.7
 #  2017.06.30.17:28:50
-# 
-# 
+#
+#
 
-# 
+#
 # request TCL package from ACDS 16.1
-# 
+#
 package require -exact qsys 16.1
 
 
-# 
+#
 # module i2s_clkctrl_api
-# 
+#
 set_module_property DESCRIPTION ""
 set_module_property NAME i2s_clkctrl_api
 set_module_property VERSION 1.7
@@ -32,9 +32,9 @@ set_module_property ALLOW_GREYBOX_GENERATION false
 set_module_property REPORT_HIERARCHY false
 
 
-# 
+#
 # file sets
-# 
+#
 add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL i2s_clkctrl_apb
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
@@ -42,19 +42,19 @@ set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
 add_fileset_file i2s_clkctrl_apb.v VERILOG PATH i2s_clkctrl_apb.v TOP_LEVEL_FILE
 
 
-# 
+#
 # parameters
-# 
+#
 
 
-# 
+#
 # display items
-# 
+#
 
 
-# 
+#
 # connection point clock
-# 
+#
 add_interface clock clock end
 set_interface_property clock clockRate 0
 set_interface_property clock ENABLED true
@@ -66,9 +66,9 @@ set_interface_property clock SVD_ADDRESS_GROUP ""
 add_interface_port clock clk clk Input 1
 
 
-# 
+#
 # connection point reset
-# 
+#
 add_interface reset reset end
 set_interface_property reset associatedClock clock
 set_interface_property reset synchronousEdges DEASSERT
@@ -81,9 +81,9 @@ set_interface_property reset SVD_ADDRESS_GROUP ""
 add_interface_port reset reset_n reset_n Input 1
 
 
-# 
+#
 # connection point apb_slave
-# 
+#
 add_interface apb_slave apb end
 set_interface_property apb_slave associatedClock clock
 set_interface_property apb_slave associatedReset reset
@@ -102,9 +102,9 @@ add_interface_port apb_slave pready pready Output 1
 add_interface_port apb_slave pwdata pwdata Input 32
 
 
-# 
+#
 # connection point clk_48
-# 
+#
 add_interface clk_48 clock end
 set_interface_property clk_48 clockRate 0
 set_interface_property clk_48 ENABLED true
@@ -116,9 +116,9 @@ set_interface_property clk_48 SVD_ADDRESS_GROUP ""
 add_interface_port clk_48 clk_48 clk Input 1
 
 
-# 
+#
 # connection point clk_44
-# 
+#
 add_interface clk_44 clock end
 set_interface_property clk_44 clockRate 0
 set_interface_property clk_44 ENABLED true
@@ -130,9 +130,9 @@ set_interface_property clk_44 SVD_ADDRESS_GROUP ""
 add_interface_port clk_44 clk_44 clk Input 1
 
 
-# 
+#
 # connection point conduit
-# 
+#
 add_interface conduit conduit end
 set_interface_property conduit associatedClock ""
 set_interface_property conduit associatedReset ""
@@ -142,16 +142,15 @@ set_interface_property conduit PORT_NAME_MAP ""
 set_interface_property conduit CMSIS_SVD_VARIABLES ""
 set_interface_property conduit SVD_ADDRESS_GROUP ""
 
-add_interface_port conduit playback_lrclk playback_lrclk Output 1
-add_interface_port conduit clk_sel_48_44 clk_sel_48_44 Output 1
-add_interface_port conduit master_slave_mode master_slave_mode Output 1
+add_interface_port conduit aud_daclrclk aud_daclrclk Bidir 1
+add_interface_port conduit aud_bclk aud_bclk Bidir 1
 add_interface_port conduit bclk bclk Output 1
-add_interface_port conduit capture_lrclk capture_lrclk Output 1
+add_interface_port conduit aud_adclrclk aud_adclrclk Bidir 1
 
 
-# 
+#
 # connection point mclk
-# 
+#
 add_interface mclk clock start
 set_interface_property mclk associatedDirectClock ""
 set_interface_property mclk clockRate 0
@@ -163,21 +162,5 @@ set_interface_property mclk CMSIS_SVD_VARIABLES ""
 set_interface_property mclk SVD_ADDRESS_GROUP ""
 
 add_interface_port mclk mclk clk Output 1
-
-
-# 
-# connection point ext
-# 
-add_interface ext conduit end
-set_interface_property ext associatedClock ""
-set_interface_property ext associatedReset ""
-set_interface_property ext ENABLED true
-set_interface_property ext EXPORT_OF ""
-set_interface_property ext PORT_NAME_MAP ""
-set_interface_property ext CMSIS_SVD_VARIABLES ""
-set_interface_property ext SVD_ADDRESS_GROUP ""
-
-add_interface_port ext ext_bclk bclk Input 1
-add_interface_port ext ext_capture_lrclk capture_lrclk Input 1
-add_interface_port ext ext_playback_lrclk playback_lrclk Input 1
+add_interface_port mclk i2s_clk i2s_clk Output 1
 

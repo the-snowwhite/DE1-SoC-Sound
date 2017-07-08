@@ -170,33 +170,16 @@ assign GPIO_0[31]       = ~LCD_VSD;
 //=======================================================
 //  REG/WIRE declarations
 //=======================================================
-	wire				clock_bridge_0_out_clk_clk;
 	wire				hps_0_h2f_reset_reset_n;
 	wire	[63:0]		i2s_output_apb_0_playback_fifo_data;
-	wire				i2s_output_apb_0_playback_fifo_read;
+	wire				i2s_playback_fifo_ack;
 	wire				i2s_output_apb_0_playback_fifo_empty;
-	wire				i2s_output_apb_0_playback_fifo_full;
-	wire				i2s_output_apb_0_playback_fifo_clk;
-	wire				i2s_output_apb_0_playback_dma_enable;
 	wire				i2s_playback_enable;
 	wire	[63:0]		i2s_output_apb_0_capture_fifo_data;
-	wire				i2s_output_apb_0_capture_fifo_write;
-	wire				i2s_output_apb_0_capture_fifo_empty;
 	wire				i2s_output_apb_0_capture_fifo_full;
-	wire				i2s_output_apb_0_capture_fifo_clk;
-	wire				i2s_output_apb_0_capture_dma_enable;
 	wire				i2s_capture_enable;
-	wire				i2s_clkctrl_apb_0_ext_bclk;
-	wire				i2s_clkctrl_apb_0_ext_playback_lrclk;
-	wire				i2s_clkctrl_apb_0_ext_capture_lrclk;
-	wire				i2s_clkctrl_apb_0_conduit_master_slave_mode;
-	wire				i2s_clkctrl_apb_0_conduit_clk_sel_48_44;
 	wire				i2s_clkctrl_apb_0_conduit_bclk;
-	wire				i2s_clkctrl_apb_0_conduit_playback_lrclk;
-	wire				i2s_clkctrl_apb_0_conduit_capture_lrclk;
-	wire				i2s_clkctrl_apb_0_mclk_clk;
-	wire				clock_bridge_48_out_clk_clk;
-	wire				clock_bridge_44_out_clk_clk;
+	wire				i2s_clk;
 
 //=======================================================
 //  Structural coding
@@ -205,7 +188,6 @@ assign GPIO_0[31]       = ~LCD_VSD;
     soc_system u0 (
 		.clk_clk							(CLOCK_50),
 		.reset_reset_n						(hps_0_h2f_reset_reset_n),
-		.clock_bridge_0_out_clk_clk			(clock_bridge_0_out_clk_clk),
 
 		.memory_mem_a						(HPS_DDR3_ADDR),
 		.memory_mem_ba						(HPS_DDR3_BA),
@@ -223,16 +205,16 @@ assign GPIO_0[31]       = ~LCD_VSD;
 		.memory_mem_odt						(HPS_DDR3_ODT),
 		.memory_mem_dm						(HPS_DDR3_DM),
 		.memory_oct_rzqin					(HPS_DDR3_RZQ),
-        .lcd_clk_clk                                  (LCD_DCLK),
-        .alt_vip_itc_0_clocked_video_vid_clk          (LCD_DCLK),
-        .alt_vip_itc_0_clocked_video_vid_data         ({LCD_R,LCD_G,LCD_B}),
-        .alt_vip_itc_0_clocked_video_underflow        (),
-        .alt_vip_itc_0_clocked_video_vid_datavalid    (LCD_DE),
-        .alt_vip_itc_0_clocked_video_vid_v_sync       (LCD_VSD),
-        .alt_vip_itc_0_clocked_video_vid_h_sync       (LCD_HSD),
-        .alt_vip_itc_0_clocked_video_vid_f            (),
-        .alt_vip_itc_0_clocked_video_vid_h            (),
-        .alt_vip_itc_0_clocked_video_vid_v            (),
+		.lcd_clk_clk                                  (LCD_DCLK),
+		.alt_vip_itc_0_clocked_video_vid_clk          (LCD_DCLK),
+		.alt_vip_itc_0_clocked_video_vid_data         ({LCD_R,LCD_G,LCD_B}),
+		.alt_vip_itc_0_clocked_video_underflow        (),
+		.alt_vip_itc_0_clocked_video_vid_datavalid    (LCD_DE),
+		.alt_vip_itc_0_clocked_video_vid_v_sync       (LCD_VSD),
+		.alt_vip_itc_0_clocked_video_vid_h_sync       (LCD_HSD),
+		.alt_vip_itc_0_clocked_video_vid_f            (),
+		.alt_vip_itc_0_clocked_video_vid_h            (),
+		.alt_vip_itc_0_clocked_video_vid_v            (),
 		.hps_io_hps_io_emac1_inst_TX_CLK	(HPS_ENET_GTX_CLK),
 		.hps_io_hps_io_emac1_inst_TXD0		(HPS_ENET_TX_DATA[0]),
 		.hps_io_hps_io_emac1_inst_TXD1		(HPS_ENET_TX_DATA[1]),
@@ -298,41 +280,27 @@ assign GPIO_0[31]       = ~LCD_VSD;
 		.hps_io_hps_io_gpio_inst_GPIO54		(HPS_KEY),
 		.hps_io_hps_io_gpio_inst_GPIO61		(HPS_GSENSOR_INT),
 
-        .hps_0_h2f_reset_reset_n			(hps_0_h2f_reset_reset_n),
+		.hps_0_h2f_reset_reset_n			(hps_0_h2f_reset_reset_n),
 
-		.i2s_output_apb_0_playback_fifo_data(i2s_output_apb_0_playback_fifo_data),
-		.i2s_output_apb_0_playback_fifo_read(i2s_output_apb_0_playback_fifo_read),
-		.i2s_output_apb_0_playback_fifo_empty(i2s_output_apb_0_playback_fifo_empty),
-		.i2s_output_apb_0_playback_fifo_full(i2s_output_apb_0_playback_fifo_full),
-		.i2s_output_apb_0_playback_fifo_clk	(i2s_output_apb_0_playback_fifo_clk),
-		.i2s_output_apb_0_dma_control_enable_playback(i2s_output_apb_0_playback_dma_enable),
-		.i2s_output_apb_0_capture_fifo_data	(i2s_output_apb_0_capture_fifo_data),
-		.i2s_output_apb_0_capture_fifo_write(i2s_output_apb_0_capture_fifo_write),
-		.i2s_output_apb_0_capture_fifo_empty(i2s_output_apb_0_capture_fifo_empty),
-		.i2s_output_apb_0_capture_fifo_full	(i2s_output_apb_0_capture_fifo_full),
-		.i2s_output_apb_0_capture_fifo_clk	(i2s_output_apb_0_capture_fifo_clk),
-		.i2s_output_apb_0_dma_control_enable_capture(i2s_output_apb_0_capture_dma_enable),
+		.i2s_output_apb_0_playback_fifo_data				(i2s_output_apb_0_playback_fifo_data), 	// out
+		.i2s_output_apb_0_playback_fifo_ack					(i2s_playback_fifo_ack),				//in
+		.i2s_output_apb_0_playback_fifo_empty				(i2s_output_apb_0_playback_fifo_empty),	// out
+		.i2s_output_apb_0_playback_fifo_full				(),										// out
+		.i2s_output_apb_0_playback_fifo_i2s_playback_enable	(i2s_playback_enable),					// out
+		.i2s_output_apb_0_playback_fifo_full				(),
+		.i2s_output_apb_0_capture_fifo_data					(i2s_output_apb_0_capture_fifo_data), 	// in
+		.i2s_output_apb_0_capture_fifo_write				(i2s_capture_fifo_write),				// in
+		.i2s_output_apb_0_capture_fifo_empty				(),										// out
+		.i2s_output_apb_0_capture_fifo_full					(i2s_output_apb_0_capture_fifo_full),	// out
+		.i2s_output_apb_0_capture_fifo_i2s_capture_enable	(i2s_capture_enable),					// out
 
-		.i2s_clkctrl_apb_0_ext_bclk			(i2s_clkctrl_apb_0_ext_bclk),
-		.i2s_clkctrl_apb_0_ext_playback_lrclk(i2s_clkctrl_apb_0_ext_playback_lrclk),
-		.i2s_clkctrl_apb_0_ext_capture_lrclk(i2s_clkctrl_apb_0_ext_capture_lrclk),
-		.i2s_clkctrl_apb_0_conduit_master_slave_mode(i2s_clkctrl_apb_0_conduit_master_slave_mode),
-
-		.i2s_clkctrl_apb_0_conduit_clk_sel_48_44(i2s_clkctrl_apb_0_conduit_clk_sel_48_44),
-		.i2s_clkctrl_apb_0_conduit_bclk		(i2s_clkctrl_apb_0_conduit_bclk),
-		.i2s_clkctrl_apb_0_conduit_playback_lrclk(i2s_clkctrl_apb_0_conduit_playback_lrclk),
-		.i2s_clkctrl_apb_0_conduit_capture_lrclk(i2s_clkctrl_apb_0_conduit_capture_lrclk),
-		.i2s_clkctrl_apb_0_mclk_clk			(i2s_clkctrl_apb_0_mclk_clk),
-
-		.clock_bridge_48_out_clk_clk		(clock_bridge_48_out_clk_clk),
-		.clock_bridge_44_out_clk_clk		(clock_bridge_44_out_clk_clk),
-
+		.i2s_clkctrl_apb_0_conduit_bclk						(i2s_clkctrl_apb_0_conduit_bclk),		// out
+		.i2s_clkctrl_apb_0_mclk_clk							(AUD_XCK),								// out
+		.i2s_clkctrl_apb_0_conduit_aud_daclrclk				(AUD_DACLRCK),							// inout
+		.i2s_clkctrl_apb_0_conduit_aud_adclrclk				(AUD_ADCLRCK),							// inout
+		.i2s_clkctrl_apb_0_conduit_aud_bclk					(AUD_BCLK),								// inout
+		.i2s_clkctrl_apb_0_mclk_i2s_clk						(i2s_clk)								// out
 	);
-
-	wire i2s_clk;
-	wire i2s_data_out;
-	assign i2s_clk = i2s_clkctrl_apb_0_conduit_clk_sel_48_44 ?
-		clock_bridge_44_out_clk_clk : clock_bridge_48_out_clk_clk;
 
 	i2s_shift_out i2s_shift_out(
 		.reset_n							(hps_0_h2f_reset_reset_n),
@@ -345,11 +313,10 @@ assign GPIO_0[31]       = ~LCD_VSD;
 
 		.enable								(i2s_playback_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
-		.lrclk								(i2s_clkctrl_apb_0_conduit_playback_lrclk),
-		.data_out							(i2s_data_out)
+		.lrclk								(AUD_DACLRCK),
+		.data_out							(AUD_DACDAT)
 	);
 
-	wire i2s_data_in;
 	i2s_shift_in i2s_shift_in(
 		.reset_n							(hps_0_h2f_reset_reset_n),
 		.clk								(i2s_clk),
@@ -361,54 +328,8 @@ assign GPIO_0[31]       = ~LCD_VSD;
 
 		.enable								(i2s_capture_enable),
 		.bclk								(i2s_clkctrl_apb_0_conduit_bclk),
-		.lrclk								(i2s_clkctrl_apb_0_conduit_capture_lrclk),
-		.data_in							(i2s_data_in)
+		.lrclk								(AUD_ADCLRCK),
+		.data_in							(AUD_ADCDAT)
 	);
 
-	// Combinatorics
-	assign AUD_XCK = i2s_clkctrl_apb_0_mclk_clk;
-	assign i2s_playback_enable = i2s_output_apb_0_playback_dma_enable & ~i2s_output_apb_0_playback_fifo_empty;
-	assign i2s_capture_enable = i2s_output_apb_0_capture_dma_enable & ~i2s_output_apb_0_capture_fifo_full;
-
-	// Sync fifo read ack
-	reg [2:0] i2s_playback_fifo_ack_synchro;
-	always @(posedge clock_bridge_0_out_clk_clk or negedge hps_0_h2f_reset_reset_n)
-		if (~hps_0_h2f_reset_reset_n)
-			i2s_playback_fifo_ack_synchro <= 0;
-		else
-			i2s_playback_fifo_ack_synchro <= {i2s_playback_fifo_ack_synchro[1:0], i2s_playback_fifo_ack};
-	assign i2s_output_apb_0_playback_fifo_read = i2s_playback_fifo_ack_synchro[2] & ~i2s_playback_fifo_ack_synchro[1];
-	assign i2s_output_apb_0_playback_fifo_clk = clock_bridge_0_out_clk_clk;
-
-	// Sync fifo write
-	reg [2:0] i2s_capture_fifo_write_synchro;
-	always @(posedge clock_bridge_0_out_clk_clk or negedge hps_0_h2f_reset_reset_n)
-		if (~hps_0_h2f_reset_reset_n)
-			i2s_capture_fifo_write_synchro <= 0;
-		else
-			i2s_capture_fifo_write_synchro <= {i2s_capture_fifo_write_synchro[1:0], i2s_capture_fifo_write};
-	assign i2s_output_apb_0_capture_fifo_write = i2s_capture_fifo_write_synchro[2] & ~i2s_capture_fifo_write_synchro[1];
-	assign i2s_output_apb_0_capture_fifo_clk = clock_bridge_0_out_clk_clk;
-
-	// Out
-	assign AUD_DACDAT = i2s_data_out;
-
-	// Audio input
-	assign i2s_data_in = AUD_ADCDAT;
-	//assign i2s_data_in = i2s_data_out; // Loopback for testing
-
-	// Audio clocks inouts
-	assign AUD_BCLK = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_bclk : 1'bZ;
-	assign AUD_DACLRCK = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_playback_lrclk : 1'bZ;
-	assign AUD_ADCLRCK = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_capture_lrclk : 1'bZ;
-
-	assign i2s_clkctrl_apb_0_ext_bclk = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_bclk : AUD_BCLK;
-	assign i2s_clkctrl_apb_0_ext_playback_lrclk = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_playback_lrclk : AUD_DACLRCK;
-	assign i2s_clkctrl_apb_0_ext_capture_lrclk = i2s_clkctrl_apb_0_conduit_master_slave_mode ?
-		i2s_clkctrl_apb_0_conduit_capture_lrclk : AUD_DACLRCK;
 endmodule

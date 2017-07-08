@@ -3,21 +3,21 @@
 # DO NOT MODIFY
 
 
-# 
+#
 # i2s_output_apb "i2s_output_apb" v1.4
 # Bjarne Steinsb� 2017.06.30.17:37:17
-# 
-# 
+#
+#
 
-# 
+#
 # request TCL package from ACDS 16.1
-# 
+#
 package require -exact qsys 16.1
 
 
-# 
+#
 # module i2s_output_apb
-# 
+#
 set_module_property DESCRIPTION ""
 set_module_property NAME i2s_output_apb
 set_module_property VERSION 1.4
@@ -33,9 +33,9 @@ set_module_property ALLOW_GREYBOX_GENERATION false
 set_module_property REPORT_HIERARCHY false
 
 
-# 
+#
 # file sets
-# 
+#
 add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL i2s_output_apb
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
@@ -45,19 +45,19 @@ add_fileset_file capture_fifo.qip OTHER PATH capture_fifo.qip
 add_fileset_file playback_fifo.qip OTHER PATH playback_fifo.qip
 
 
-# 
+#
 # parameters
-# 
+#
 
 
-# 
+#
 # display items
-# 
+#
 
 
-# 
+#
 # connection point reset
-# 
+#
 add_interface reset reset end
 set_interface_property reset associatedClock clk
 set_interface_property reset synchronousEdges DEASSERT
@@ -70,9 +70,9 @@ set_interface_property reset SVD_ADDRESS_GROUP ""
 add_interface_port reset reset_n reset_n Input 1
 
 
-# 
+#
 # connection point apb_slave
-# 
+#
 add_interface apb_slave apb end
 set_interface_property apb_slave associatedClock clk
 set_interface_property apb_slave associatedReset reset
@@ -91,9 +91,9 @@ add_interface_port apb_slave prdata prdata Output 32
 add_interface_port apb_slave pready pready Output 1
 
 
-# 
+#
 # connection point clk
-# 
+#
 add_interface clk clock end
 set_interface_property clk clockRate 0
 set_interface_property clk ENABLED true
@@ -105,9 +105,9 @@ set_interface_property clk SVD_ADDRESS_GROUP ""
 add_interface_port clk clk clk Input 1
 
 
-# 
+#
 # connection point playback_fifo
-# 
+#
 add_interface playback_fifo conduit end
 set_interface_property playback_fifo associatedClock ""
 set_interface_property playback_fifo associatedReset ""
@@ -117,16 +117,16 @@ set_interface_property playback_fifo PORT_NAME_MAP ""
 set_interface_property playback_fifo CMSIS_SVD_VARIABLES ""
 set_interface_property playback_fifo SVD_ADDRESS_GROUP ""
 
-add_interface_port playback_fifo playback_fifo_read read Input 1
+add_interface_port playback_fifo i2s_playback_fifo_ack ack Input 1
+add_interface_port playback_fifo i2s_playback_enable i2s_playback_enable Output 1
 add_interface_port playback_fifo playback_fifo_empty empty Output 1
 add_interface_port playback_fifo playback_fifo_full full Output 1
-add_interface_port playback_fifo playback_fifo_clk clk Input 1
 add_interface_port playback_fifo playback_fifo_data data Output 64
 
 
-# 
+#
 # connection point playback_dma
-# 
+#
 add_interface playback_dma conduit end
 set_interface_property playback_dma associatedClock ""
 set_interface_property playback_dma associatedReset ""
@@ -141,9 +141,9 @@ add_interface_port playback_dma playback_dma_single dma_single Output 1
 add_interface_port playback_dma playback_dma_ack dma_ack Input 1
 
 
-# 
+#
 # connection point dma_control
-# 
+#
 add_interface dma_control conduit end
 set_interface_property dma_control associatedClock ""
 set_interface_property dma_control associatedReset ""
@@ -153,13 +153,10 @@ set_interface_property dma_control PORT_NAME_MAP ""
 set_interface_property dma_control CMSIS_SVD_VARIABLES ""
 set_interface_property dma_control SVD_ADDRESS_GROUP ""
 
-add_interface_port dma_control playback_dma_enable enable_playback Output 1
-add_interface_port dma_control capture_dma_enable enable_capture Output 1
 
-
-# 
+#
 # connection point capture_fifo
-# 
+#
 add_interface capture_fifo conduit end
 set_interface_property capture_fifo associatedClock clk
 set_interface_property capture_fifo associatedReset ""
@@ -170,15 +167,15 @@ set_interface_property capture_fifo CMSIS_SVD_VARIABLES ""
 set_interface_property capture_fifo SVD_ADDRESS_GROUP ""
 
 add_interface_port capture_fifo capture_fifo_data data Input 64
-add_interface_port capture_fifo capture_fifo_write write Input 1
+add_interface_port capture_fifo i2s_capture_fifo_write write Input 1
 add_interface_port capture_fifo capture_fifo_full full Output 1
-add_interface_port capture_fifo capture_fifo_clk clk Input 1
+add_interface_port capture_fifo i2s_capture_enable i2s_capture_enable Output 1
 add_interface_port capture_fifo capture_fifo_empty empty Output 1
 
 
-# 
+#
 # connection point capture_dma
-# 
+#
 add_interface capture_dma conduit end
 set_interface_property capture_dma associatedClock ""
 set_interface_property capture_dma associatedReset ""

@@ -12,18 +12,40 @@ module i2s_clkctrl_apb (
 	// Clock inputs, synthesized in PLL or external TCXOs
 	input				clk_48, // this clock, divided by mclk_devisor, should be 22.
 	input				clk_44,
-	// In slave mode, an external master makes the clocks
-	input				ext_bclk,
-	input				ext_playback_lrclk,
-	input				ext_capture_lrclk,
-	output				master_slave_mode, // 1 = master, 0 (default) = slave
 	// Clock derived outputs
-	output				clk_sel_48_44, // 1 = mclk derived from 44, 0 (default) mclk derived from 48
 	output				mclk,
+	output				i2s_clk, // 1 = mclk derived from 44, 0 (default) mclk derived from 48
+	inout				aud_bclk,
 	output				bclk,
-	output				playback_lrclk,
-	output				capture_lrclk
+	inout				aud_daclrclk,
+	inout				aud_adclrclk
 );
+	wire				playback_lrclk;
+	wire				capture_lrclk;
+	// In slave mode, an external master makes the clocks
+	wire				ext_bclk;
+	wire				master_slave_mode; // 1 = master, 0 (default) = slave
+	wire				ext_playback_lrclk;
+	wire				ext_capture_lrclk;
+	wire				clk_sel_48_44; // 1 = mclk derived from 44, 0 (default) mclk derived from 48
+
+	assign aud_bclk = master_slave_mode ?
+		bclk : 1'bZ;
+	assign aud_daclrclk = master_slave_mode ?
+		playback_lrclk : 1'bZ;
+	assign aud_adclrclk = master_slave_mode ?
+		capture_lrclk : 1'bZ;
+
+	assign ext_bclk = master_slave_mode ?
+		bclk : aud_bclk;
+	assign ext_playback_lrclk = master_slave_mode ?
+		playback_lrclk : aud_daclrclk;
+	assign ext_capture_lrclk = master_slave_mode ?
+		capture_lrclk : aud_daclrclk;
+
+	assign i2s_clk = clk_sel_48_44 ?
+		clk_44 : clk_48;
+
 /*
  * Example: Input clock is 24.5760MHz
  * mclk_divisor = 0 (divide by (0+1)*2=2) => mclk = 12.288MHz
@@ -94,7 +116,7 @@ module i2s_clkctrl_apb (
 		.lrclk1		(playback_lrclk44),
 		.lrclk2		(capture_lrclk44)
 	);
-	
+
 	// Output muxes
 	assign mclk = clk_sel_48_44 ? mclk44 : mclk48;
 	assign bclk = master_slave_mode

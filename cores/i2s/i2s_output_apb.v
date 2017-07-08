@@ -11,27 +11,30 @@ module i2s_output_apb (
 	output wire			pready, // apb ready
 	// FIFO interface to playback shift register
 	output wire	[63:0]	playback_fifo_data,
-	input wire			playback_fifo_read,
-	output wire			playback_fifo_empty,
+	input wire			i2s_playback_fifo_ack,
+ 	output wire			playback_fifo_empty,
 	output wire			playback_fifo_full,
-	input wire			playback_fifo_clk,
 	// DMA interface, SOCFPGA
 	output reg			playback_dma_req,
 	output reg			playback_dma_single,
 	input wire			playback_dma_ack,
-	output wire			playback_dma_enable,
 	// FIFO interface to capture shift register
 	input wire	[63:0]	capture_fifo_data,
-	input wire			capture_fifo_write,
+	input wire			i2s_capture_fifo_write,
 	output wire			capture_fifo_empty,
-	output wire			capture_fifo_full,
-	input wire			capture_fifo_clk,
+	output wire			i2s_playback_enable,
+	output wire			i2s_capture_enable,
+ 	output wire			capture_fifo_full,
 	// DMA interface, SOCFPGA
 	output reg			capture_dma_req,
 	output reg			capture_dma_single,
-	input wire			capture_dma_ack,
-	output wire			capture_dma_enable
+	input wire			capture_dma_ack
 );
+	wire			playback_fifo_read;
+	wire			playback_dma_enable;
+	wire			capture_dma_enable;
+	assign i2s_playback_enable = playback_dma_enable & ~playback_fifo_empty;
+	assign i2s_capture_enable = capture_dma_enable & ~capture_fifo_full;
 
 	wire			wr_fifo_write;
 	wire			wr_fifo_clear;
@@ -53,6 +56,24 @@ module i2s_output_apb (
 	wire			data_sel = psel && (paddr == 0);
 	wire			sts_sel = psel && (paddr == 4); // RO
 	wire			cmd_sel = psel && (paddr == 8);
+
+	wire			capture_fifo_write;
+	reg [2:0] i2s_playback_fifo_ack_synchro;
+	reg [2:0] i2s_capture_fifo_write_synchro;
+
+	always @(posedge clk or negedge reset_n)
+		if (~reset_n)
+			i2s_playback_fifo_ack_synchro <= 0;
+		else
+			i2s_playback_fifo_ack_synchro <= {i2s_playback_fifo_ack_synchro[1:0], i2s_playback_fifo_ack};
+	assign playback_fifo_read = i2s_playback_fifo_ack_synchro[2] & ~i2s_playback_fifo_ack_synchro[1];
+
+	always @(posedge clk or negedge reset_n)
+		if (~reset_n)
+			i2s_capture_fifo_write_synchro <= 0;
+		else
+			i2s_capture_fifo_write_synchro <= {i2s_capture_fifo_write_synchro[1:0], i2s_capture_fifo_write};
+	assign capture_fifo_write = i2s_capture_fifo_write_synchro[2] & ~i2s_capture_fifo_write_synchro[1];
 
 	// Register access
 	always @(posedge clk or negedge reset_n)
@@ -163,7 +184,7 @@ module i2s_output_apb (
 		.wrempty	(wr_fifo_empty),
 		.wrfull		(wr_fifo_full),
 		.wrusedw	(wr_fifo_used),
-		.rdclk		(playback_fifo_clk),
+		.rdclk		(clk),
 		.rdreq		(playback_fifo_read),
 		.q			(playback_fifo_data),
 		.rdempty	(playback_fifo_empty),
@@ -171,7 +192,7 @@ module i2s_output_apb (
 		.rdusedw	()
 	);
 	capture_fifo	capture_fifo_inst (
-		.wrclk			(capture_fifo_clk),
+		.wrclk			(clk),
 		.wrreq			(capture_fifo_write),
 		.data			(capture_fifo_data),
 		.aclr			(rd_fifo_clear),
