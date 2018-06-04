@@ -166,6 +166,14 @@ assign GPIO_0[30]       = ~LCD_HSD;
 assign GPIO_0[35]       = LCD_DE;
 assign GPIO_0[31]       = ~LCD_VSD;
 
+//////////// VGA  //////////
+assign   VGA_BLANK_N          =     1'b1;
+assign   VGA_SYNC_N           =     1'b0;
+assign   VGA_CLK              =     LCD_DCLK;
+assign  {VGA_B,VGA_G,VGA_R}   =     {LCD_B,LCD_G,LCD_R};
+assign   VGA_VS               =     LCD_VSD;
+assign   VGA_HS               =     LCD_HSD;
+
 
 //=======================================================
 //  REG/WIRE declarations

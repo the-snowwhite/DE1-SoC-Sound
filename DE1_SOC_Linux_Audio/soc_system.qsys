@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
          type = "int";
       }
    }
@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "7";
          type = "int";
       }
    }
@@ -29,7 +29,7 @@
    {
       datum baseAddress
       {
-         value = "256";
+         value = "200704";
          type = "String";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "2";
          type = "int";
       }
    }
@@ -53,7 +53,7 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "3";
          type = "int";
       }
    }
@@ -61,7 +61,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "6";
          type = "int";
       }
    }
@@ -77,7 +77,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "5";
          type = "int";
       }
    }
@@ -85,7 +85,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "1";
          type = "int";
       }
    }
@@ -125,7 +125,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "4";
          type = "int";
       }
    }
@@ -226,11 +226,11 @@
   <parameter name="F_FALLING_EDGE" value="0" />
   <parameter name="F_RISING_EDGE" value="0" />
   <parameter name="GENERATE_SYNC" value="0" />
-  <parameter name="H_ACTIVE_PIXELS" value="1366" />
-  <parameter name="H_BACK_PORCH" value="16" />
+  <parameter name="H_ACTIVE_PIXELS" value="1024" />
+  <parameter name="H_BACK_PORCH" value="160" />
   <parameter name="H_BLANK" value="0" />
-  <parameter name="H_FRONT_PORCH" value="40" />
-  <parameter name="H_SYNC_LENGTH" value="32" />
+  <parameter name="H_FRONT_PORCH" value="24" />
+  <parameter name="H_SYNC_LENGTH" value="136" />
   <parameter name="INTERLACED" value="0" />
   <parameter name="NO_OF_MODES" value="1" />
   <parameter name="NUMBER_OF_COLOUR_PLANES" value="4" />
@@ -239,26 +239,26 @@
   <parameter name="USE_CONTROL" value="0" />
   <parameter name="USE_EMBEDDED_SYNCS" value="0" />
   <parameter name="V_ACTIVE_LINES" value="768" />
-  <parameter name="V_BACK_PORCH" value="16" />
+  <parameter name="V_BACK_PORCH" value="29" />
   <parameter name="V_BLANK" value="0" />
-  <parameter name="V_FRONT_PORCH" value="5" />
-  <parameter name="V_SYNC_LENGTH" value="4" />
+  <parameter name="V_FRONT_PORCH" value="3" />
+  <parameter name="V_SYNC_LENGTH" value="6" />
  </module>
  <module name="alt_vip_vfr_hdmi" kind="alt_vip_vfr" version="14.0" enabled="1">
-  <parameter name="AUTO_CLOCK_MASTER_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="150000000" />
+  <parameter name="AUTO_CLOCK_MASTER_CLOCK_RATE" value="130000000" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="130000000" />
   <parameter name="BITS_PER_PIXEL_PER_COLOR_PLANE" value="8" />
   <parameter name="CLOCKS_ARE_SEPARATE" value="1" />
   <parameter name="FAMILY" value="Cyclone V" />
   <parameter name="MAX_IMAGE_HEIGHT" value="768" />
-  <parameter name="MAX_IMAGE_WIDTH" value="1366" />
+  <parameter name="MAX_IMAGE_WIDTH" value="1024" />
   <parameter name="MEM_PORT_WIDTH" value="128" />
   <parameter name="NUMBER_OF_CHANNELS_IN_PARALLEL" value="4" />
   <parameter name="NUMBER_OF_CHANNELS_IN_SEQUENCE" value="1" />
   <parameter name="RMASTER_BURST_TARGET" value="32" />
   <parameter name="RMASTER_FIFO_DEPTH" value="64" />
  </module>
- <module name="audio_pll" kind="altera_pll" version="16.1" enabled="1">
+ <module name="audio_pll" kind="altera_pll" version="17.1" enabled="1">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device" value="5CSEMA5F31C6" />
@@ -461,13 +461,13 @@
   <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
   <parameter name="gui_use_locked" value="false" />
  </module>
- <module name="clk_0" kind="clock_source" version="16.1" enabled="1">
+ <module name="clk_0" kind="clock_source" version="17.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
- <module name="hps_0" kind="altera_hps" version="16.1" enabled="1">
+ <module name="hps_0" kind="altera_hps" version="17.1" enabled="1">
   <parameter name="ABSTRACT_REAL_COMPARE_TEST" value="false" />
   <parameter name="ABS_RAM_MEM_INIT_FILENAME" value="meminit" />
   <parameter name="ACV_PHY_CLK_ADD_FR_PHASE" value="0.0" />
@@ -564,7 +564,7 @@
   <parameter name="EXPORT_AFI_HALF_CLK" value="false" />
   <parameter name="EXTRA_SETTINGS" value="" />
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="130000000" />
   <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
@@ -577,8 +577,8 @@
   <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
   <parameter name="F2SCLK_SDRAMCLK_FREQ" value="0" />
   <parameter name="F2SCLK_WARMRST_Enable" value="false" />
-  <parameter name="F2SDRAM_Type" value="" />
-  <parameter name="F2SDRAM_Width" value="" />
+  <parameter name="F2SDRAM_Type" value="AXI-3" />
+  <parameter name="F2SDRAM_Width" value="128" />
   <parameter name="F2SINTERRUPT_Enable" value="true" />
   <parameter name="F2S_Width" value="3" />
   <parameter name="FIX_READ_LATENCY" value="8" />
@@ -1007,7 +1007,7 @@
    kind="i2s_output_apb"
    version="1.4"
    enabled="1" />
- <module name="pll_0" kind="altera_pll" version="16.1" enabled="1">
+ <module name="pll_0" kind="altera_pll" version="17.1" enabled="1">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device" value="5CSEMA5F31C6" />
@@ -1070,7 +1070,7 @@
   <parameter name="gui_cascade_outclk_index" value="0" />
   <parameter name="gui_channel_spacing" value="0.0" />
   <parameter name="gui_clk_bad" value="false" />
-  <parameter name="gui_device_speed_grade" value="1" />
+  <parameter name="gui_device_speed_grade" value="2" />
   <parameter name="gui_divide_factor_c0" value="1" />
   <parameter name="gui_divide_factor_c1" value="1" />
   <parameter name="gui_divide_factor_c10" value="1" />
@@ -1126,8 +1126,8 @@
   <parameter name="gui_multiply_factor" value="1" />
   <parameter name="gui_number_of_clocks" value="2" />
   <parameter name="gui_operation_mode" value="normal" />
-  <parameter name="gui_output_clock_frequency0" value="150.0" />
-  <parameter name="gui_output_clock_frequency1" value="75.0" />
+  <parameter name="gui_output_clock_frequency0" value="130.0" />
+  <parameter name="gui_output_clock_frequency1" value="65.0" />
   <parameter name="gui_output_clock_frequency10" value="100.0" />
   <parameter name="gui_output_clock_frequency11" value="100.0" />
   <parameter name="gui_output_clock_frequency12" value="100.0" />
@@ -1213,22 +1213,22 @@
  <module
    name="sysid_qsys_0"
    kind="altera_avalon_sysid_qsys"
-   version="16.1"
+   version="17.1"
    enabled="1">
   <parameter name="id" value="-559038737" />
  </module>
  <connection
    kind="avalon"
-   version="16.1"
+   version="17.1"
    start="alt_vip_vfr_hdmi.avalon_master"
-   end="hps_0.f2h_axi_slave">
+   end="hps_0.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
-   version="16.1"
+   version="17.1"
    start="hps_0.h2f_lw_axi_master"
    end="i2s_clkctrl_apb_0.apb_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1237,7 +1237,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="16.1"
+   version="17.1"
    start="hps_0.h2f_lw_axi_master"
    end="i2s_output_apb_0.apb_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1246,16 +1246,16 @@
  </connection>
  <connection
    kind="avalon"
-   version="16.1"
+   version="17.1"
    start="hps_0.h2f_lw_axi_master"
    end="alt_vip_vfr_hdmi.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0100" />
+  <parameter name="baseAddress" value="0x00031000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
-   version="16.1"
+   version="17.1"
    start="hps_0.h2f_lw_axi_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1264,65 +1264,70 @@
  </connection>
  <connection
    kind="avalon_streaming"
-   version="16.1"
+   version="17.1"
    start="alt_vip_vfr_hdmi.avalon_streaming_source"
    end="alt_vip_itc_0.din" />
- <connection kind="clock" version="16.1" start="clk_0.clk" end="sysid_qsys_0.clk" />
+ <connection kind="clock" version="17.1" start="clk_0.clk" end="sysid_qsys_0.clk" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk"
    end="i2s_output_apb_0.clk" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk"
    end="i2s_clkctrl_apb_0.clock" />
  <connection
    kind="clock"
-   version="16.1"
-   start="clk_0.clk"
-   end="alt_vip_vfr_hdmi.clock_master" />
- <connection
-   kind="clock"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk"
    end="hps_0.f2h_axi_clock" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk"
    end="hps_0.h2f_axi_clock" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
- <connection kind="clock" version="16.1" start="clk_0.clk" end="audio_pll.refclk" />
- <connection kind="clock" version="16.1" start="clk_0.clk" end="pll_0.refclk" />
+ <connection kind="clock" version="17.1" start="clk_0.clk" end="audio_pll.refclk" />
+ <connection kind="clock" version="17.1" start="clk_0.clk" end="pll_0.refclk" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="audio_pll.outclk0"
    end="i2s_clkctrl_apb_0.clk_48" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
+   start="pll_0.outclk0"
+   end="alt_vip_vfr_hdmi.clock_master" />
+ <connection
+   kind="clock"
+   version="17.1"
    start="pll_0.outclk0"
    end="alt_vip_vfr_hdmi.clock_reset" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
+   start="pll_0.outclk0"
+   end="hps_0.f2h_sdram0_clock" />
+ <connection
+   kind="clock"
+   version="17.1"
    start="pll_0.outclk0"
    end="alt_vip_itc_0.is_clk_rst" />
  <connection
    kind="clock"
-   version="16.1"
+   version="17.1"
    start="audio_pll.outclk1"
    end="i2s_clkctrl_apb_0.clk_44" />
  <connection
    kind="conduit"
-   version="16.1"
+   version="17.1"
    start="hps_0.f2h_dma_req0"
    end="i2s_output_apb_0.playback_dma">
   <parameter name="endPort" value="" />
@@ -1333,7 +1338,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="16.1"
+   version="17.1"
    start="hps_0.f2h_dma_req1"
    end="i2s_output_apb_0.capture_dma">
   <parameter name="endPort" value="" />
@@ -1344,40 +1349,40 @@
  </connection>
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="alt_vip_vfr_hdmi.clock_master_reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="alt_vip_vfr_hdmi.clock_reset_reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="alt_vip_itc_0.is_clk_rst_reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="sysid_qsys_0.reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="i2s_output_apb_0.reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="audio_pll.reset" />
  <connection
    kind="reset"
-   version="16.1"
+   version="17.1"
    start="clk_0.clk_reset"
    end="i2s_clkctrl_apb_0.reset" />
- <connection kind="reset" version="16.1" start="clk_0.clk_reset" end="pll_0.reset" />
+ <connection kind="reset" version="17.1" start="clk_0.clk_reset" end="pll_0.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="0" />
